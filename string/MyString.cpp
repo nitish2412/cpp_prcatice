@@ -37,7 +37,7 @@ class MyString{
             cout<<"copy constructor is called\n";
         }
 
-        // Equality Operator
+        // Equality Operator implemented
         bool operator==(const MyString& other) const {
             cout<<"equality opearator is called\n";
             return len == other.len && std::strcmp(res, other.res) == 0;
@@ -75,6 +75,56 @@ class MyString{
             cout<<"move assignment operator is called.\n";
             return *this;
         }
+
+        //string concatination with +
+        MyString operator+(const MyString &other) const{
+
+            cout<<"String concatination called!!!!\n";
+            MyString result;
+            result.len=this->len+other.len;
+            result.res=new char[result.len+1];
+            strcpy(result.res,res);
+            strcat(result.res,other.res);
+
+            return result;
+        }
+
+
+        //string concatination with +=
+        MyString& operator+=(const MyString &other){
+            
+            cout<<"string concatination with +=!!!!!!!!!!!!!!\n";
+            len+=other.len;
+            char* newdata=new char[len+1];
+            strcpy(newdata,res);
+            strcat(newdata,other.res);
+            delete []res;
+            res=newdata;
+
+            return *this;
+        }
+
+        //indexing operator with modifiable
+        char & operator[](size_t index){
+            cout<<"Non const version of index operator is called\n";
+            return res[index];
+        }
+
+        //indexing operator with readonly
+        const char & operator[](size_t index) const{
+             cout<<"Const version of index operator is called\n";
+            return res[index];
+        }
+        //Stream Insertion Operator (<<)
+
+        ostream& operator<<(std::ostream& os) {
+            os << this->res;  // Access data via getter
+            return os;
+        }
+        const char* getdata() const{
+            return res;
+        }
+
         ~MyString(){
             delete []res;
             //cout<<"destructor is called\n";
@@ -99,6 +149,24 @@ int main(){
     str5.display();
 
     //str2.display();
+    MyString str11("Hello, ");
+    MyString str12("World!");
+    MyString str13;
+    str13=str11+str12;
+    str13.display();
+
+    str13+=str11;
+    str13.display();
+
+    MyString str_index("nitish");
+    str_index[0]='m';
+    str_index.display();
+
+    const MyString str_const_index("World");
+    char a=str_const_index[0];
+    //str_const_index[0]='t';
+    str_const_index.display();
+    //cout<<str_const_index;
 
     return 0;
 }
